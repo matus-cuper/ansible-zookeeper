@@ -1,4 +1,5 @@
 ---
-- name: restart zookeeper
-  service: name=zookeeper state=restarted
-  when: run_mode == 'Deploy'
+- name: Restart zookeeper
+  service:
+    name: zookeeper
+    state: restarted

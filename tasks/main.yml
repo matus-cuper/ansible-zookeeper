@@ -1,12 +1,29 @@
 ---
-- include: stop.yml
-  when: run_mode == 'Stop'
+- name: Install zookeeper
+  apt:
+    pkg: zookeeperd
+    state: present
+    update_cache: true
 
-- include: install.yml
-  when: run_mode == 'Install' or run_mode == 'Deploy'
+- name: Setup zoo.cfg
+  template:
+    src: zoo.cfg.j2
+    dest: /etc/zookeeper/conf/zoo.cfg
+    mode: 644
+  notify:
+    - Restart zookeeper
 
-- include: configure.yml
-  when: run_mode == 'Configure' or run_mode == 'Deploy'
+- name: Setup myid
+  template:
+    src: myid.j2
+    dest: /etc/zookeeper/conf/myid
+    mode: 644
+  notify:
+    - Restart zookeeper
 
-- include: start.yml
-  when: run_mode == 'Start' or run_mode == 'Deploy'
+- name: Start zookeeper service
+  service:
+    name: zookeeper
+    state: started
+
+- meta: flush_handlers

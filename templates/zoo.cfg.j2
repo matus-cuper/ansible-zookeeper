@@ -16,16 +16,17 @@ dataDir=/var/lib/zookeeper
 # the port at which the clients will connect
 clientPort={{zookeeper_client_port}}
 
-# Maximum number of clients that can connect from one client
-maxClientCnxns={{zookeeper_maxClientCnxns}}
-
 # specify all zookeeper servers
 # The fist port is used by followers to connect to the leader
 # The second one is used for leader election
+#server.1=zookeeper1:2888:3888
+#server.2=zookeeper2:2888:3888
+#server.3=zookeeper3:2888:3888
+
 {% set zookeeper_hosts_list = zookeeper_hosts.split(',') %}
 
 {% for url in zookeeper_hosts_list %}
-server.{{loop.index0}}={{url.split(':')[0]}}:2888:3888
+server.{{loop.index}}={{url.split(':')[0]}}:2888:3888
 {% endfor %}
 
 # To avoid seeks ZooKeeper allocates space in the transaction log file in
@@ -53,9 +54,3 @@ server.{{loop.index0}}={{url.split(':')[0]}}:2888:3888
 # read throughput the leader can be configured to not accept clients and focus
 # on coordination.
 #leaderServes=yes
-
-# Autopurge every hour to avoid using lots of disk in bursts
-# Order of the next 2 properties matters.
-# autopurge.snapRetainCount must be before autopurge.purgeInterval.
-autopurge.snapRetainCount=3
-autopurge.purgeInterval=1

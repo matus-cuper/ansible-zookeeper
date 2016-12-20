@@ -1,22 +1,9 @@
 ---
-monasca_log_level: WARN
-zookeeper_maxClientCnxns: 60
+zookeeper_host_1: "127.0.0.1"
+zookeeper_host_2: "127.0.1.1"
+zookeeper_host_3: "10.0.2.15"
+
 zookeeper_client_port: 2181
-zookeeper_hosts: "{{ansible_fqdn}}:2181"
-monasca_wait_for_period: 30
-run_mode: Deploy
+zookeeper_hosts: "{{ zookeeper_host_1 }}:{{ zookeeper_client_port }},{{ zookeeper_host_2 }}:{{ zookeeper_client_port }},{{ zookeeper_host_3 }}:{{ zookeeper_client_port }}"
 
-# Variables only for RedHat family
-monasca_download_dir: "/opt/monasca/"
-zookeeper_version: 3.4.6
-zookeeper_url: https://archive.apache.org/dist/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
-zookeeper_dir: /opt/zookeeper-{{zookeeper_version}}
-zookeeper_data_dir: /var/lib/zookeeper
-zookeeper_log_dir: /var/log/zookeeper
-
-os_zookeeper_conf_dir:
-  RedHat: "{{ zookeeper_dir }}/conf"
-  Debian: "/etc/zookeeper/conf"
-
-# Common
-zookeeper_conf_dir: "{{ os_zookeeper_conf_dir[ansible_os_family] }}"
+# zookeeper_myid: "1"
